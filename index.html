@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">إتمام</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+            animation: slideIn 0.5s ease-in-out; /* تطبيق تأثير الانتقال */
+        }
+        h1:hover {
+            color: #4CAF50; /* تغيير لون العنوان عند المرور عليه بالفأرة */
+        }
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-100px); /* بداية الحركة */
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0); /* نهاية الحركة */
+                opacity: 1;
+            }
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        input[type="text"], button, select {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        select {
+            width: 150px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            margin: 5px;
+            background-color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* محاذاة النصوص */
+        }
+        li:hover {
+            background-color: #f2f2f2;
+        }
+        .high-priority {
+            color: red;
+        }
+        .medium-priority {
+            color: orange;
+        }
+        .low-priority {
+            color: green;
+        }
+        .completed {
+            text-decoration: line-through;
+        }
+        .completion-marker {
+            margin-right: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #ccc;
+            border: 2px solid #999;
+        }
+        .task-time {
+            margin-left: auto; /* لتحديد موقع الوقت في أقصى اليمين */
+            color: #666;
+            font-size: 0.8em; /* تحديد حجم الخط */
+        }
+    </style>
+</head>
+<body>
+    <h1 id="task-list-title">إتمام</h1>
+    <button onclick="toggleLanguage()" id="language-toggle-ar">تغيير اللغة</button>
+    <button onclick="toggleLanguage()" id="language-toggle-en" style="display:none;">Language</button>
+
+    <div id="task-form-ar">
+        <input type="text" id="task-input-ar" placeholder="أضف مهمة">
+        <button onclick="addTask('ar')">أضف</button>
+        <select id="priority-select-ar">
+            <option value="high">هامة جداً</option>
+            <option value="medium">متوسطة الأهمية</option>
+            <option value="low">منخفضة الأهمية</option>
+        </select>
+    </div>
+
+    <div id="task-form-en" style="display:none;">
+        <input type="text" id="task-input-en" placeholder="Add Task">
+        <button onclick="addTask('en')">Add</button>
+        <select id="priority-select-en">
+            <option value="high">High Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="low">Low Priority</option>
+        </select>
+    </div>
+
+    <h2 id="high-priority-header">المهام الهامة جداً</h2>
+    <ul id="high-priority-tasks"></ul>
+
+    <h2 id="medium-priority-header">المهام المتوسطة الأهمية</h2>
+    <ul id="medium-priority-tasks"></ul>
+
+    <h2 id="low-priority-header">المهام منخفضة الأهمية</h2>
+    <ul id="low-priority-tasks"></ul>
+
+    <h2 id="completed-tasks-header">المهام التي تم اكتمالها</h2>
+    <ul id="completed-tasks"></ul>
+
+    <script>
+        var language = 'ar';
+        var taskInput;
+        var prioritySelect;
+        var taskForm;
+        var highPriorityHeader;
+        var mediumPriorityHeader;
+        var lowPriorityHeader;
+        var completedTasksHeader;
+        var languageToggleAr;
+        var languageToggleEn;
+
+        function toggleLanguage() {
+            if (language === 'ar') {
+                language = 'en';
+            } else {
+                language = 'ar';
+            }
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            if (language === 'ar') {
+                document.getElementById('page-title').textContent = 'إتمام';
+                document.getElementById('task-list-title').textContent = 'إتمام';
+                taskInput = document.getElementById('task-input-ar');
+                prioritySelect = document.getElementById('priority-select-ar');
+                taskForm = document.getElementById('task-form-ar');
+                highPriorityHeader = document.getElementById('high-priority-header');
+                mediumPriorityHeader = document.getElementById('medium-priority-header');
+                lowPriorityHeader = document.getElementById('low-priority-header');
+                completedTasksHeader = document.getElementById('completed-tasks-header');
+                languageToggleAr = document.getElementById('language-toggle-ar');
+                languageToggleEn = document.getElementById('language-toggle-en');
+
+                languageToggleAr.style.display = 'block';
+                languageToggleEn.style.display = 'none';
+
+                taskInput.placeholder = "أضف مهمة";
+                taskForm.style.display = 'block';
+                document.getElementById('task-form-en').style.display = 'none';
+                highPriorityHeader.textContent = 'المهام الهامة جداً';
+                mediumPriorityHeader.textContent = 'المهام المتوسطة الأهمية';
+                lowPriorityHeader.textContent = 'المهام منخفضة الأهمية';
+                completedTasksHeader.textContent = 'المهام التي تم اكتمالها';
+            } else {
+                document.getElementById('page-title').textContent = 'Task Completion';
+                document.getElementById('task-list-title').textContent = 'Task Completion';
+                taskInput = document.getElementById('task-input-en');
+                prioritySelect = document.getElementById('priority-select-en');
+                taskForm = document.getElementById('task-form-en');
+                highPriorityHeader = document.getElementById('high-priority-header');
+                mediumPriorityHeader = document.getElementById('medium-priority-header');
+                lowPriorityHeader = document.getElementById('low-priority-header');
+                completedTasksHeader = document.getElementById('completed-tasks-header');
+                languageToggleAr = document.getElementById('language-toggle-ar');
+                languageToggleEn = document.getElementById('language-toggle-en');
+
+                languageToggleAr.style.display = 'none';
+                languageToggleEn.style.display = 'block';
+
+                taskInput.placeholder = "Add Task";
+                taskForm.style.display = 'block';
+                document.getElementById('task-form-ar').style.display = 'none';
+                highPriorityHeader.textContent = 'High Priority Tasks';
+                mediumPriorityHeader.textContent = 'Medium Priority Tasks';
+                lowPriorityHeader.textContent = 'Low Priority Tasks';
+                completedTasksHeader.textContent = 'Completed Tasks';
+            }
+        }
+
+        function addTask(lang) {
+            var taskText = (lang === 'ar') ? taskInput.value : taskInput.value.trim();
+            var priority = (lang === 'ar') ? prioritySelect.value : prioritySelect.value.trim();
+            var currentTime = new Date().toLocaleTimeString();
+
+            if (taskText === '') {
+                alert((lang === 'ar') ? 'الرجاء إدخال مهمة!' : 'Please enter a task!');
+                return;
+            }
+
+            var taskList;
+            if (priority === 'high') {
+                taskList = document.getElementById('high-priority-tasks');
+            } else if (priority === 'medium') {
+                taskList = document.getElementById('medium-priority-tasks');
+            } else {
+                taskList = document.getElementById('low-priority-tasks');
+            }
+
+            var newTaskItem = document.createElement('li');
+            var completionMarker = document.createElement('span');
+            completionMarker.className = 'completion-marker';
+            newTaskItem.appendChild(completionMarker);
+            newTaskItem.appendChild(document.createTextNode(taskText));
+
+            var timeText = document.createElement('span');
+            timeText.className = 'task-time'; // إضافة الفئة لتنسيق الوقت
+            timeText.textContent = currentTime;
+            newTaskItem.appendChild(timeText); // إضافة وقت الإضافة للمهمة
+
+            if (priority === 'high') {
+                newTaskItem.classList.add('high-priority');
+            } else if (priority === 'medium') {
+                newTaskItem.classList.add('medium-priority');
+            } else {
+                newTaskItem.classList.add('low-priority');
+            }
+
+            newTaskItem.addEventListener('click', function() {
+                newTaskItem.classList.toggle('completed');
+                var completedTasksList = document.getElementById('completed-tasks');
+                if (newTaskItem.classList.contains('completed')) {
+                    completedTasksList.appendChild(newTaskItem);
+                } else {
+                    taskList.appendChild(newTaskItem);
+                }
+            });
+
+            taskList.appendChild(newTaskItem);
+            taskInput.value = '';
+        }
+
+        window.onload = updateLanguage;
+    </script>
+</body>
+</html>
